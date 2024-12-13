@@ -1,9 +1,11 @@
 mod conversation;
+mod intoresult;
 
 use std::io::Write;
 
 use chatgpt::{client::ChatGPT, config::ChatGPTEngine};
 use clap::Parser;
+use conversation::Conversation;
 use reqwest::Proxy;
 
 /// Simple program to greet a person
@@ -32,6 +34,7 @@ async fn main() {
         client
     };
 
+    let mut cvs = Conversation::new(client.clone());
     loop {
         let mut string = String::new();
         print!(">> ");
@@ -40,11 +43,7 @@ async fn main() {
     
         // Call the send_message function asynchronously
     
-        println!(
-            "{}",
-            client.send_message(string).await.unwrap().message().content
-        );
-        
+        println!("{}", cvs.send_message(string).await.unwrap());
     
     }
 
